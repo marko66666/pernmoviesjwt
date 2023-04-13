@@ -20,9 +20,7 @@ const InputMovie = () => {
         body: JSON.stringify(reqBody),
       });
 
-      const parseResponse = await response.json();
-      console.log(parseResponse);
-      // window.location = "/dashboard";
+      window.location = "/dashboard";
     } catch (err) {
       console.log(err.message);
     }

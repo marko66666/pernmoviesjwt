@@ -13,7 +13,10 @@ const ListAndSearchMovies = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `http://localhost:5000/dashboard/movies/search?term=${term}`
+        `http://localhost:5000/dashboard/movies/search?term=${term}`,
+        {
+          headers: { token: localStorage.token },
+        }
       );
 
       const parseResponse = await response.json();
@@ -28,6 +31,7 @@ const ListAndSearchMovies = () => {
     try {
       await fetch(`http://localhost:5000/dashboard/movies/${id}`, {
         method: "DELETE",
+        headers: { token: localStorage.token },
       }); // index.js, line: 44
 
       setMovies(movies.filter((movie) => movie.id !== id)); // 1) movies array is updated 2) Updated movies array is rendered on screen on line: 41
@@ -37,7 +41,9 @@ const ListAndSearchMovies = () => {
   };
 
   const getMovies = async () => {
-    const res = await fetch("http://localhost:5000/dashboard/movies"); // sends HTTP GET request to index.js, line: 10
+    const res = await fetch("http://localhost:5000/dashboard", {
+      headers: { token: localStorage.token },
+    }); // sends HTTP GET request to index.js, line: 10
     const movieArray = await res.json();
     setMovies(movieArray); // 1) movies array is updated 2) Updated movies array is rendered on screen on line: 41
   };

@@ -10,7 +10,10 @@ const EditMovie = ({ movie }) => {
       const body = { title, summary, rating };
       await fetch(`http://localhost:5000/dashboard/movies/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.token,
+        },
         body: JSON.stringify(body),
       }); // index.js, line: 32
       window.location = "/dashboard";

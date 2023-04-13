@@ -5,9 +5,7 @@ const authorization = require("../middleware/authorization");
 router.get("/", authorization, async (req, res) => {
   try {
     const user = await pool.query(
-      "SELECT u.user_name, m.id, m.title, m.summary, m.rating" +
-        "FROM users AS u LEFT JOIN movie AS m ON u.user_id = m.user_id" +
-        "WHERE u.user_id = $1",
+      "SELECT u.user_name, m.id, m.title, m.summary, m.rating FROM users AS u LEFT JOIN movie AS m ON u.user_id = m.user_id WHERE u.user_id = $1",
       [req.user]
     );
 
@@ -18,22 +16,13 @@ router.get("/", authorization, async (req, res) => {
   }
 });
 
-router.get("/movies", async (req, res) => {
-  try {
-    const allMovies = await pool.query("SELECT * FROM movie");
-    res.status(200).json(allMovies.rows); // ListMovies.jsx, line: 24
-  } catch (err) {
-    res.status(503); // ListMovies.jsx, line: 24
-  }
-});
-
-router.get("/movies/search", async (req, res) => {
+router.get("/movies/search", authorization, async (req, res) => {
   try {
     const { term } = req.query;
 
     const movies = await pool.query(
-      "SELECT * FROM movie WHERE title || summary || rating LIKE $1",
-      [`%${term}%`]
+      "SELECT * FROM movie WHERE user_id = $1 AND title || summary || rating LIKE $2",
+      [req.user, `%${term}%`]
     );
 
     res.json(movies.rows);

@@ -47,6 +47,16 @@ function App() {
         <div className="container">
           <Routes>
             <Route
+              path="/"
+              element={
+                !isAuthenticated ? (
+                  <Login setAuth={setAuth} />
+                ) : (
+                  <Navigate to="/dashboard" />
+                )
+              }
+            />
+            <Route
               path="/login"
               element={
                 !isAuthenticated ? (
